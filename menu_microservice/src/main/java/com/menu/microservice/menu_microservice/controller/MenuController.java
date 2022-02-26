@@ -1,0 +1,44 @@
+package com.menu.microservice.menu_microservice.controller;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import com.menu.microservice.menu_microservice.model.Menu;
+import com.menu.microservice.menu_microservice.service.MenuService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+@RestController
+@RequestMapping("/menu")
+public class MenuController {
+
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    MenuService menuService;
+
+    @PostMapping(value = "/date")
+    public ResponseEntity<Menu> createMenu(@RequestBody MenuDTO mDto){
+
+        ItemDTO itemDTO=restTemplate.postForObject("http://localhost:9000/api/items/list",
+        mDto.getItems(),
+        ItemDTO.class);
+        itemDTO.getItems().forEach(System.out::println);
+        Menu entity = new Menu();
+        entity.setMenuDate(mDto.getMenuDate());
+        entity.setItems(itemDTO.getItems());
+        entity.setUpdatedDate(LocalDate.now());
+        Menu menu=menuService.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(menu);
+    }
+    }
+    
+
