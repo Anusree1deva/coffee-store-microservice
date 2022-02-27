@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "item_micro"
+		},
+		{
+			"path": "menu_microservice"
+		},
+		{
+			"name": "server-discovery",
+			"path": "..\\server-discovery"
+		}
+	],
+	"settings": {}
+}
